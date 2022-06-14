@@ -5,6 +5,7 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -25,17 +26,16 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerHttpRequest serverHttpRequest = exchange.getRequest();
-        ServerHttpResponse serverHttpResponse = exchange.getResponse();
-        String token = exchange.getRequest().getHeaders().getFirst(AUTHHEADER);
+        ServerHttpRequest request = exchange.getRequest();
+        ServerHttpResponse response = exchange.getResponse();
+        String token = request.getHeaders().getFirst(AUTHHEADER);
         if(token == null){
-            ServerHttpResponse response = exchange.getResponse();
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             String body = " {\n" +
                     "  \"code\": 401,\n" +
                     "  \"message\": \"Unauthorized\"\n" +
                     "}";
-            return getVoidMono(serverHttpResponse, serverHttpRequest, body);
+            return getVoidMono(response, request, body);
         }
         //todo token校验逻辑
         return chain.filter(exchange);
