@@ -15,8 +15,29 @@ spring:
           max-connections: 2000
         connect-timeout: 3000
         response-timeout: 15000
+
+      routes:
+        - id: test
+          uri: https://httpbin.org
+          predicates:
+            - Path=/test/{segment}
+          filters:
+            - SetPath=/{segment}
+
+
+
   application:
     name: gateway
 
 server:
   port: 9000
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
