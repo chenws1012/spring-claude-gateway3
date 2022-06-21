@@ -45,7 +45,7 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
-        //todo 请求路径白名单 判断
+        //请求路径白名单 判断
         if (checkWhitePath(request.getPath().value())){
             return chain.filter(exchange);
         }
