@@ -1,0 +1,16 @@
+FROM swr.cn-east-3.myhuaweicloud.com/woody-public/openjdk:8u282-jre-buster
+#FROM openjdk:8-jre-alpine
+MAINTAINER from shwoody.com by wenshun.chen (chenwenshun@shwoody.com)
+
+ENV JAR="gateway.jar"
+# RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
+
+RUN mkdir /app
+COPY ./target/$JAR /app
+ENV TZ=Asia/Shanghai
+WORKDIR /app
+
+EXPOSE 9000
+
+ENTRYPOINT java $JAVA_OPTS -jar -Dspring.profiles.active=$SPRING_PROFILE $JAR
+
