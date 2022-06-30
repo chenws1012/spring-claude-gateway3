@@ -34,7 +34,7 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
 
     public static final String AUTHHEADER = "authorization";
 
-//    @Value("${whiteList}")
+    @Value("${whiteList}")
     private List<String> whiteList
             = Lists.newArrayList("/test/**",
             "/user-service/api/v1/login",
