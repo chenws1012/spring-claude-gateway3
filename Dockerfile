@@ -3,7 +3,7 @@ FROM swr.cn-east-3.myhuaweicloud.com/woody-public/openjdk:8u282-jre-buster
 MAINTAINER from shwoody.com by wenshun.chen (chenwenshun@shwoody.com)
 
 ENV JAR="gateway.jar"
-# RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
+RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
 
 RUN mkdir /app
 COPY ./target/$JAR /app
