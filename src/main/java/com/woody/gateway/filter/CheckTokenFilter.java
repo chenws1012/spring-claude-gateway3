@@ -34,7 +34,7 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
 
     public static final String AUTHHEADER = "authorization";
 
-    @Value("${whiteList}")
+//    @Value("${whiteList}")
     private List<String> whiteList
             = Lists.newArrayList("/test/**",
             "/user-service/api/v1/login",
@@ -45,6 +45,9 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
+        if (request.getMethod() == HttpMethod.OPTIONS){
+            return chain.filter(exchange);
+        }
         //请求路径白名单 判断
         if (checkWhitePath(request.getPath().value())){
             return chain.filter(exchange);
