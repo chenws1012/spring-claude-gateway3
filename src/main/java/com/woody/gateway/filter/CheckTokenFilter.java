@@ -1,6 +1,12 @@
 package com.woody.gateway.filter;
 
 import com.google.common.collect.Lists;
+import com.woody.gateway.util.CheckTokenUtil;
+import com.woody.gateway.util.CircleBloomFilter;
+import com.woody.gateway.util.TokenParse;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -10,7 +16,6 @@ import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.server.RequestPath;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
@@ -21,7 +26,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,9 +34,25 @@ import java.util.Optional;
  */
 @Component
 @RefreshScope
+@RequiredArgsConstructor
 public class CheckTokenFilter implements GlobalFilter, Ordered {
 
     public static final String AUTHHEADER = "authorization";
+
+    static final String BODY_401 = " {\n" +
+            "  \"code\": 401,\n" +
+            "  \"message\": \"Unauthorized\"\n" +
+            "}";
+
+    static final String BODY_402 = " {\n" +
+            "  \"code\": 402,\n" +
+            "  \"message\": \"token expired\"\n" +
+            "}";
+
+    private final CheckTokenUtil checkTokenUtil;
+    private final TokenParse tokenParse;
+    private final CircleBloomFilter passedCircleBloomFilter;
+    private final CircleBloomFilter stopedCircleBloomFilter;
 
     @Value("${whiteList}")
     private List<String> whiteList
@@ -56,21 +76,29 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         String token = request.getHeaders().getFirst(AUTHHEADER);
         if(token == null){
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
-            String body = " {\n" +
-                    "  \"code\": 401,\n" +
-                    "  \"message\": \"Unauthorized\"\n" +
-                    "}";
-            return getVoidMono(response, request, body);
+            return getVoidMono(response, request, BODY_401);
         }
-        //todo token校验逻辑
-        request.mutate().header("userId", "111123456");
-        request.mutate().headers(httpHeaders -> {
+
+        if (stopedCircleBloomFilter.exists(token)){
+            return getVoidMono(response, request, BODY_401);
+        }
+        Claims claims = null;
+        if (passedCircleBloomFilter.exists(token)){
+            claims = tokenParse.parseToken(token);
+           setHeaders(claims, request.mutate());
+        }else {
             try {
-                httpHeaders.put("Uname", Collections.singletonList(URLEncoder.encode("Bella", "utf-8")));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                claims = checkTokenUtil.check(token);
+                passedCircleBloomFilter.put(token);
+                setHeaders(claims, request.mutate());
+            } catch (ExpiredJwtException e) {
+                stopedCircleBloomFilter.put(token);
+                return getVoidMono(response, request, BODY_402);
+            } catch (Exception e){
+                stopedCircleBloomFilter.put(token);
+                return getVoidMono(response, request, BODY_401);
             }
-        });
+        }
         return chain.filter(exchange);
     }
 
@@ -100,6 +128,16 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         }
 
         return false;
+    }
+
+    private void setHeaders(Claims claims, ServerHttpRequest.Builder builder){
+        builder.header(CheckTokenUtil.USER_ID_KEY, claims.get(CheckTokenUtil.USER_ID_KEY).toString());
+        try {
+            builder.header("uname", URLEncoder.encode(claims.getSubject(), "utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            builder.header("uname", claims.getSubject());
+        }
+        builder.header(Claims.AUDIENCE, claims.getAudience());
     }
 
     public static void main(String[] args) {

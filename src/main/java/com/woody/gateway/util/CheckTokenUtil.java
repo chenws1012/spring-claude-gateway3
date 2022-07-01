@@ -32,8 +32,9 @@ public class CheckTokenUtil {
     }
 
     public Claims check(String token) {
-        Claims claims = Jwts.parser()
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(PUBLICKEY)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
 
