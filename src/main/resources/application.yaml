@@ -16,6 +16,7 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
+            maxAge: 3600
             allowedOrigins: "*"
             allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization, *"
             allowCredentials: true

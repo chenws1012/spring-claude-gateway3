@@ -104,10 +104,10 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
 
     private Mono<Void> getVoidMono(ServerHttpResponse serverHttpResponse, ServerHttpRequest httpRequest, String body) {
         HttpHeaders headers = serverHttpResponse.getHeaders();
-        headers.add("Access-Control-Allow-Origin", Optional.ofNullable(httpRequest.getHeaders().getFirst("origin")).orElse("*") );
-        headers.add("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-        headers.add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, *");
-        headers.add("Access-Control-Allow-Credentials", "true");
+//        headers.add("Access-Control-Allow-Origin", Optional.ofNullable(httpRequest.getHeaders().getFirst("origin")).orElse("*") );
+//        headers.add("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+//        headers.add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, *");
+//        headers.add("Access-Control-Allow-Credentials", "true");
         headers.add("Content-Type", "application/json;charset=UTF-8");
         
         DataBuffer dataBuffer = serverHttpResponse.bufferFactory().wrap(body.getBytes());

@@ -16,7 +16,12 @@ Access-Control-Request-Headers: authorization
 Access-Control-Request-Method: GET
 
 ###
-OPTIONS {{host}}/test/get
+GET {{host}}/test/get
 Origin: https://docs.spring.io
-Access-Control-Request-Headers: authorization
-Access-Control-Request-Method: GET
+#Access-Control-Request-Headers: authorization
+#Access-Control-Request-Method: GET
+
+
+###
+GET https://httpbin.org/get
+Origin: https://docs.spring.io
