@@ -15,7 +15,8 @@
 
 	<properties>
 		<jwt.version>0.9.1</jwt.version>
-<!--		<spring-cloud-alibaba.version>2.2.7.RELEASE</spring-cloud-alibaba.version>-->
+		<spring-boot.version>2.3.12.RELEASE</spring-boot.version>
+		<spring-cloud-alibaba.version>2.2.7.RELEASE</spring-cloud-alibaba.version>
 	</properties>
 
 	<dependencies>
