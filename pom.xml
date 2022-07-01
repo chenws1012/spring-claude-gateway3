@@ -14,7 +14,7 @@
 	<name>gateway</name>
 
 	<properties>
-		<jwt.version>0.9.1</jwt.version>
+		<jwt.version>0.11.2.29-SNAPSHOT</jwt.version>
 		<spring-boot.version>2.3.12.RELEASE</spring-boot.version>
 		<spring-cloud-alibaba.version>2.2.6.RELEASE</spring-cloud-alibaba.version>
 	</properties>
@@ -46,8 +46,20 @@
 
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt</artifactId>
+			<artifactId>jjwt-api</artifactId>
 			<version>${jwt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>${jwt.version}</version>
+			<!--            <scope>runtime</scope>-->
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson if Gson is preferred -->
+			<version>${jwt.version}</version>
+			<!--            <scope>runtime</scope>-->
 		</dependency>
 
 		<dependency>

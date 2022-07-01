@@ -41,9 +41,3 @@ management:
   endpoint:
     health:
       show-details: always
-
-publicKeyPem: |
-  -----BEGIN PUBLIC KEY-----
-  MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAElpzANDFRDkLNJ6Ee4iB9hogVXD56
-  gNchXHXAnuYxLxuNPPBZDvtvMBUToT+L2UiUzusQJYo9oI86GH9NUqJCjQ==
-  -----END PUBLIC KEY-----
