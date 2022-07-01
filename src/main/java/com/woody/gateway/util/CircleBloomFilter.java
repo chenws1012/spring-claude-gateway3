@@ -22,7 +22,7 @@ public class CircleBloomFilter {
 
     private CopyOnWriteArrayList<BloomFilter<CharSequence>> filters;
 
-    private static final long expectedInsertions = 10000 * 1000L;
+    private static final long expectedInsertions = 10000 * 100L;
     private static final double fpp = 0.000001;
 
 
