@@ -75,6 +75,7 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         }
 
         if (stopedCircleBloomFilter.exists(token)){
+            response.setStatusCode(HttpStatus.UNAUTHORIZED);
             return getVoidMono(response, request, BODY_401);
         }
         Claims claims = null;
