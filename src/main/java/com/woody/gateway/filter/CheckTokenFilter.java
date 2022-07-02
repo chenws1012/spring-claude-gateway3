@@ -1,6 +1,7 @@
 package com.woody.gateway.filter;
 
 import com.google.common.collect.Lists;
+import com.woody.gateway.config.MyFilterConfiguration;
 import com.woody.gateway.util.CheckTokenUtil;
 import com.woody.gateway.util.CircleBloomFilter;
 import com.woody.gateway.util.TokenParse;
@@ -33,7 +34,6 @@ import java.util.Optional;
  * Created by chenwenshun on 2022/6/14
  */
 @Component
-@RefreshScope
 @RequiredArgsConstructor
 public class CheckTokenFilter implements GlobalFilter, Ordered {
 
@@ -54,12 +54,7 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
     private final CircleBloomFilter passedCircleBloomFilter;
     private final CircleBloomFilter stopedCircleBloomFilter;
 
-    @Value("${whiteList}")
-    private List<String> whiteList
-            = Lists.newArrayList("/test/**",
-            "/user-service/api/v1/login",
-            "/user-service/api/v1/register",
-            "/user-service/api/v1/refreshToken");
+    private final MyFilterConfiguration myFilterConfiguration;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -119,7 +114,7 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
 
     private boolean checkWhitePath(String reqPath){
         AntPathMatcher pathMatcher = new AntPathMatcher();
-        for (String white : whiteList) {
+        for (String white : myFilterConfiguration.getWhiteList()) {
             if (pathMatcher.match(white, reqPath)) {
                 return true;
             }
