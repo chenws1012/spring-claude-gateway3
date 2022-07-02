@@ -44,8 +44,8 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
             "  \"message\": \"Unauthorized\"\n" +
             "}";
 
-    static final String BODY_402 = " {\n" +
-            "  \"code\": 402,\n" +
+    static final String BODY_403 = " {\n" +
+            "  \"code\": 403,\n" +
             "  \"message\": \"token expired\"\n" +
             "}";
 
@@ -93,9 +93,11 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
                 setHeaders(claims, request.mutate());
             } catch (ExpiredJwtException e) {
                 stopedCircleBloomFilter.put(token);
-                return getVoidMono(response, request, BODY_402);
+                response.setStatusCode(HttpStatus.FORBIDDEN);
+                return getVoidMono(response, request, BODY_403);
             } catch (Exception e){
                 stopedCircleBloomFilter.put(token);
+                response.setStatusCode(HttpStatus.UNAUTHORIZED);
                 return getVoidMono(response, request, BODY_401);
             }
         }
@@ -104,10 +106,6 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
 
     private Mono<Void> getVoidMono(ServerHttpResponse serverHttpResponse, ServerHttpRequest httpRequest, String body) {
         HttpHeaders headers = serverHttpResponse.getHeaders();
-//        headers.add("Access-Control-Allow-Origin", Optional.ofNullable(httpRequest.getHeaders().getFirst("origin")).orElse("*") );
-//        headers.add("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-//        headers.add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, *");
-//        headers.add("Access-Control-Allow-Credentials", "true");
         headers.add("Content-Type", "application/json;charset=UTF-8");
         
         DataBuffer dataBuffer = serverHttpResponse.bufferFactory().wrap(body.getBytes());
