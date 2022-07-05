@@ -22,7 +22,6 @@ public class CheckTokenUtil {
     @Value("${publicKeyPem}")
     private String publicKeyPem;
 
-    public static final String USER_ID_KEY = "uid";
 
     @PostConstruct
     public void init() throws IOException {

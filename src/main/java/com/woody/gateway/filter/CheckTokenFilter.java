@@ -38,6 +38,8 @@ import java.util.Optional;
 public class CheckTokenFilter implements GlobalFilter, Ordered {
 
     public static final String AUTHHEADER = "authorization";
+    public static final String USER_ID_KEY = "userId";
+    public static final String USER_NAME_KEY = "userName";
 
     static final String BODY_401 = " {\n" +
             "  \"code\": 401,\n" +
@@ -125,13 +127,15 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
     }
 
     private void setHeaders(Claims claims, ServerHttpRequest.Builder builder){
-        builder.header(CheckTokenUtil.USER_ID_KEY, claims.get(CheckTokenUtil.USER_ID_KEY).toString());
+        builder.header(USER_ID_KEY, claims.get(USER_ID_KEY).toString());
         try {
-            builder.header("uname", URLEncoder.encode(claims.getSubject(), "utf-8"));
+            builder.header(USER_NAME_KEY, URLEncoder.encode(claims.getSubject(), "utf-8"));
         } catch (UnsupportedEncodingException e) {
-            builder.header("uname", claims.getSubject());
+            builder.header(USER_NAME_KEY, claims.getSubject());
         }
         builder.header(Claims.AUDIENCE, claims.getAudience());
+        builder.header("employeeId", claims.get("eid").toString());
+        builder.header("admin", claims.get("admin").toString());
     }
 
     public static void main(String[] args) {
