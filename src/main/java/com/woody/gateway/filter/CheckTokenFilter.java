@@ -127,7 +127,7 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
     }
 
     private void setHeaders(Claims claims, ServerHttpRequest.Builder builder){
-        builder.header(USER_ID_KEY, claims.get(USER_ID_KEY).toString());
+        builder.header(USER_ID_KEY, claims.get("uid").toString());
         try {
             builder.header(USER_NAME_KEY, URLEncoder.encode(claims.getSubject(), "utf-8"));
         } catch (UnsupportedEncodingException e) {
