@@ -134,8 +134,10 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
             builder.header(USER_NAME_KEY, claims.getSubject());
         }
         builder.header(Claims.AUDIENCE, claims.getAudience());
-        builder.header("employeeId", claims.get("eid").toString());
-        builder.header("admin", claims.get("admin").toString());
+        Object eid = claims.get("eid");
+        builder.header("employeeId", eid != null ? String.valueOf(eid) : null);
+        Object admin = claims.get("admin");
+        builder.header("admin", admin != null ? String.valueOf(admin) : null);
     }
 
     public static void main(String[] args) {
