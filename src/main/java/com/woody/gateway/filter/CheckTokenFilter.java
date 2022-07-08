@@ -29,6 +29,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Created by chenwenshun on 2022/6/14
@@ -40,6 +41,7 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
     public static final String AUTHHEADER = "authorization";
     public static final String USER_ID_KEY = "userId";
     public static final String USER_NAME_KEY = "userName";
+    public static final String TRACE_ID = "traceId";
 
     static final String BODY_401 = " {\n" +
             "  \"code\": 401,\n" +
@@ -127,6 +129,8 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
     }
 
     private void setHeaders(Claims claims, ServerHttpRequest.Builder builder){
+        String traceId = UUID.randomUUID().toString();
+        builder.header(TRACE_ID, traceId);
         builder.header(USER_ID_KEY, claims.get("uid").toString());
         try {
             builder.header(USER_NAME_KEY, URLEncoder.encode(claims.getSubject(), "utf-8"));
