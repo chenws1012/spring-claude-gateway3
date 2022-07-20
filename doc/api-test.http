@@ -1,6 +1,6 @@
 ###
 GET {{host}}/test/get
-Authorization: eyJraWQiOiJFRjRGMjJDMC01Q0IwLTQzNDgtOTY3Qi0wMjY0OTVFN0VGQzgiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJjb20uemhpaHVpc2h1IiwiYXVkIjoicGMiLCJzdWIiOiJ0b20iLCJpYXQiOjE2NTY2NTU4MzQsImV4cCI6MTY1NzM3NTgzNCwianRpIjoiYzBjM2UwOTMtMzZiMi00YTk2LWFiMTgtYmY3ZDhkNTdmMDhiIiwidWlkIjo4MTM5Mzk2MTksInJvbGUiOiJhZG1pbiJ9.hwiTBYkVLi_B5Hf0sXyqT3654jFv5TIImd7Qaf40nPDV245BxCMQQW5G7XAPHIlzMADxTWmcak8k8_ayJflN_w
+Authorization: eyJraWQiOiJ3ZCIsImFsZyI6IkVTMjU2In0.eyJpc3MiOiJjb20ud29vZHkiLCJhdWQiOiJZVU5fTUVOR19NQSIsInN1YiI6InNodW4iLCJpYXQiOjE2NTgyMDIxMzMsImV4cCI6MTY1ODIwMzkzMywianRpIjoiOGEzYWNlNmUtOTFhNy00N2VjLWJkNjYtMzYxOGY0YzI1NDgzIiwidWlkIjoxNDc4NTU3NTE2ODk5MTYwMDY0fQ.w5kQwt45czrbjyvkVAdft1yH9Ttr8x-ebUXGwn1BaC_Y5rWVJ4xCQKzpx0sk-5JOupzT4WBn0F35Dy0y2q9SCg
 
 
 ###
@@ -8,6 +8,7 @@ GET {{host}}/user-service/haha/lala
 Origin: https://docs.spring.io
 Access-Control-Request-Headers: authorization
 Access-Control-Request-Method: GET
+
 
 ###
 OPTIONS {{host}}/user-service/haha/lala
@@ -25,3 +26,27 @@ Origin: https://docs.spring.io
 ###
 GET https://httpbin.org/get
 Origin: https://docs.spring.io
+
+### 小程序账号登录
+POST {{host}}/ms-user/o/api/login
+Content-Type: application/json
+
+{
+  "userName": "13888888888",
+  "password": "123456"
+}
+
+> {%
+  client.global.set("auth_token", response.body.data.accessToken);
+  client.global.set("refresh_token", response.body.data.refreshToken);
+
+%}
+
+### refreshToken
+GET {{host}}/ms-user/o/api/refreshToken?refreshToken=a33549bc-c1a1-451d-a86b-c13bdc75857d
+
+###
+GET {{host}}/ms-user/userLoginLog/10
+Authorization: eyJraWQiOiJ3ZCIsImFsZyI6IkVTMjU2In0.eyJpc3MiOiJjb20ud29vZHkiLCJhdWQiOiJZVU5fTUVOR19NQSIsInN1YiI6InNodW4iLCJpYXQiOjE2NTc2MTI1NzMsImV4cCI6MTY1NzYxNDM3MywianRpIjoiYThjN2JjYWUtMjgxZS00NzU0LThmZjMtNjc0ZTJkZGMwOGMwIiwidWlkIjoxNDc4NTU3NTE2ODk5MTYwMDY0LCJlaWQiOjB9.wY3YlwNNa1En_P-zwVu_Zsl6W01mNIdgu_Qx8FS4GSmjY0iMmPaRY_I_pSCPzylzxDLJ6vSlWH6z0dJmJexDnQ
+
+
