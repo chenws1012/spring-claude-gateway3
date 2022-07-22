@@ -132,18 +132,16 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         String traceId = UUID.randomUUID().toString();
         builder.header(TRACE_ID, traceId);
         builder.header(USER_ID_KEY, claims.get("uid").toString());
+        String username = Optional.ofNullable(claims.getSubject()).orElse("");
         try {
-            builder.header(USER_NAME_KEY, URLEncoder.encode(claims.getSubject(), "utf-8"));
+            builder.header(USER_NAME_KEY, URLEncoder.encode(username, "utf-8"));
         } catch (UnsupportedEncodingException e) {
-            builder.header(USER_NAME_KEY, claims.getSubject());
+            builder.header(USER_NAME_KEY, username);
         }
         builder.header(Claims.AUDIENCE, claims.getAudience());
-        Object mid = claims.get("mid");
-        builder.header("Wd-merchantId", mid != null ? String.valueOf(mid) : null);
-        Object sid = claims.get("sid");
-        builder.header("Wd-shopId", mid != null ? String.valueOf(sid) : null);
-        Object admin = claims.get("admin");
-        builder.header("admin", admin != null ? String.valueOf(admin) : null);
+        Optional.ofNullable(claims.get("mid")).ifPresent(mid -> builder.header("Wd-merchantId", String.valueOf(mid)));
+        Optional.ofNullable(claims.get("sid")).ifPresent(sid -> builder.header("Wd-shopId", String.valueOf(sid)));
+        Optional.ofNullable(claims.get("admin")).ifPresent(admin -> builder.header("admin", String.valueOf(admin)));
     }
 
     public static void main(String[] args) {
