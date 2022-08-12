@@ -10,7 +10,7 @@ spring:
       default-filters:
         - DedupeResponseHeader=Vary Access-Control-Allow-Credentials Access-Control-Allow-Origin, RETAIN_UNIQUE
         - DedupeResponseHeader=Access-Control-Allow-Origin, RETAIN_FIRST
-        - RemoveRequestHeader=Authorization
+#        - RemoveRequestHeader=Authorization
       discovery:
         locator:
           enabled: true
