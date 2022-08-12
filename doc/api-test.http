@@ -1,6 +1,6 @@
 ###
 GET {{host}}/test/get
-Authorization: eyJraWQiOiJDV1MiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJjb20ud29vZHkiLCJhdWQiOiJ5dW4tbWVuZy1zaG9wIiwic3ViIjoidG9tIiwiaWF0IjoxNjU4MzA1ODQwLCJleHAiOjE2NTkwMjU4NDAsImp0aSI6ImVmY2QxMDdmLWUzYjUtNGMyYS1iOWNhLTBhNTcwMzYxNDBmYyIsInVpZCI6IjgxMzkzOTYxOSJ9.LVzm1qgM0X3A0zJn25PPX1rxFJkvB790tiwhw7kY8282PYN24zy2EQEpndYXlIQTF22lQAg2AfSeq5iCp4gp6w
+Authorization: eyJraWQiOiJDV1MiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJjb20ud29vZHkiLCJhdWQiOiJ5dW4tbWVuZy1zaG9wIiwic3ViIjoidG9tIiwiaWF0IjoxNjYwMTAyNDY5LCJleHAiOjE2NjA4MjI0NjksImp0aSI6ImFiMDRlZjU5LTk0ZjEtNGYzZi05OTcxLWE5M2YyZWE5ZGExYyIsInVpZCI6IjgxMzkzOTYxOSJ9.AILDmdLfvLTuifYBNZmINH0ENAIHUN8EAvW51jEthq1k3l6cioLc2NtLH41XO7zHGwPOo8-CPXk-P0Lm_CLu1g
 
 
 ###
@@ -11,7 +11,7 @@ Access-Control-Request-Method: GET
 
 
 ###
-OPTIONS {{host}}/user-service/haha/lala
+OPTIONS {{host}}/ms-user/o/api/login
 Origin: https://docs.spring.io
 Access-Control-Request-Headers: authorization
 Access-Control-Request-Method: GET

@@ -117,8 +117,9 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         return -100;
     }
 
+    private AntPathMatcher pathMatcher = new AntPathMatcher();
+
     private boolean checkWhitePath(String reqPath){
-        AntPathMatcher pathMatcher = new AntPathMatcher();
         for (String white : myFilterConfiguration.getWhiteList()) {
             if (pathMatcher.match(white, reqPath)) {
                 return true;
