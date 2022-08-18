@@ -57,6 +57,7 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
     private final TokenParse tokenParse;
     private final CircleBloomFilter passedCircleBloomFilter;
     private final CircleBloomFilter stopedCircleBloomFilter;
+    private final CircleBloomFilter expiredCircleBloomFilter;
 
     private final MyFilterConfiguration myFilterConfiguration;
 
@@ -82,6 +83,11 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             return getVoidMono(response, request, BODY_401);
         }
+
+        if (expiredCircleBloomFilter.exists(token)){
+            response.setStatusCode(HttpStatus.FORBIDDEN);
+            return getVoidMono(response, request, BODY_403);
+        }
         Claims claims = null;
         if (passedCircleBloomFilter.exists(token)){
             claims = tokenParse.parseToken(token);
@@ -92,7 +98,7 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
                 passedCircleBloomFilter.put(token);
                 setHeaders(claims, request.mutate());
             } catch (ExpiredJwtException e) {
-                stopedCircleBloomFilter.put(token);
+                expiredCircleBloomFilter.put(token);
                 response.setStatusCode(HttpStatus.FORBIDDEN);
                 return getVoidMono(response, request, BODY_403);
             } catch (Exception e){
