@@ -32,7 +32,7 @@ spring:
         pool:
           max-connections: 2000
         connect-timeout: 3000
-        response-timeout: 15000
+        response-timeout: 15s
 
       routes:
         - id: test
