@@ -1,6 +1,6 @@
 ###
 GET {{host}}/test/get
-Authorization: eyJraWQiOiJDV1MiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJjb20ud29vZHkiLCJhdWQiOiJ5dW4tbWVuZy1zaG9wIiwic3ViIjoidG9tIiwiaWF0IjoxNjYwMTAyNDY5LCJleHAiOjE2NjA4MjI0NjksImp0aSI6ImFiMDRlZjU5LTk0ZjEtNGYzZi05OTcxLWE5M2YyZWE5ZGExYyIsInVpZCI6IjgxMzkzOTYxOSJ9.AILDmdLfvLTuifYBNZmINH0ENAIHUN8EAvW51jEthq1k3l6cioLc2NtLH41XO7zHGwPOo8-CPXk-P0Lm_CLu1g
+Authorization: eyJraWQiOiJDV1MiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJjb20ud29vZHkiLCJhdWQiOiJ5dW4tbWVuZy1zaG9wIiwic3ViIjoidG9tIiwiaWF0IjoxNjYwODczMjg5LCJleHAiOjE2NjYwNTcyODksImp0aSI6IjRiNjNlMmU5LTgzNGMtNGY3Yy1hYzMyLTE1ZDdhYzc1NjgxZiIsInVpZCI6IjgxMzkzOTYxOSJ9.Zv5Uaa5PdbBiMma0AFktxvuscyyOk8q15JlgatjL_dBk22l6snFjtQs_IULGOFyx0lxh_FsMPW7wigzMMhmrnA
 
 
 ###
@@ -11,10 +11,10 @@ Access-Control-Request-Method: GET
 
 
 ###
-OPTIONS {{host}}/ms-user/o/api/login
+OPTIONS {{host}}/ms-common/upload
 Origin: https://docs.spring.io
 Access-Control-Request-Headers: authorization
-Access-Control-Request-Method: GET
+Access-Control-Request-Method: POST
 
 ###
 GET {{host}}/test/get
