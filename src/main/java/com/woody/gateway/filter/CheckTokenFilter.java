@@ -68,6 +68,8 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         if (request.getMethod() == HttpMethod.OPTIONS){
             return chain.filter(exchange);
         }
+        String traceId = UUID.randomUUID().toString();
+        request.mutate().header(TRACE_ID, traceId);
         //请求路径白名单 判断
         if (checkWhitePath(request.getPath().value())){
             return chain.filter(exchange);
@@ -136,8 +138,6 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
     }
 
     private void setHeaders(Claims claims, ServerHttpRequest.Builder builder){
-        String traceId = UUID.randomUUID().toString();
-        builder.header(TRACE_ID, traceId);
         builder.header(USER_ID_KEY, claims.get("uid").toString());
         String username = Optional.ofNullable(claims.getSubject()).orElse("");
         try {
