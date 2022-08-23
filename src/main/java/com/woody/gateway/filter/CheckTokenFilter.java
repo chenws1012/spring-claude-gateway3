@@ -55,9 +55,10 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
 
     private final CheckTokenUtil checkTokenUtil;
     private final TokenParse tokenParse;
-    private final CircleBloomFilter passedCircleBloomFilter;
-    private final CircleBloomFilter stopedCircleBloomFilter;
-    private final CircleBloomFilter expiredCircleBloomFilter;
+    private final CircleBloomFilter circleBloomFilter;
+    public static final String PASSED_PREFIX = "passed";
+    public static final String STOPPED_PREFIX = "stopped";
+    public static final String EXPIRED_PREFIX = "expired";
 
     private final MyFilterConfiguration myFilterConfiguration;
 
@@ -81,30 +82,30 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
             return getVoidMono(response, request, BODY_401);
         }
 
-        if (stopedCircleBloomFilter.exists(token)){
+        if (circleBloomFilter.exists(STOPPED_PREFIX.concat(token))){
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             return getVoidMono(response, request, BODY_401);
         }
 
-        if (expiredCircleBloomFilter.exists(token)){
+        if (circleBloomFilter.exists(EXPIRED_PREFIX.concat(token))){
             response.setStatusCode(HttpStatus.FORBIDDEN);
             return getVoidMono(response, request, BODY_403);
         }
         Claims claims = null;
-        if (passedCircleBloomFilter.exists(token)){
+        if (circleBloomFilter.exists(PASSED_PREFIX.concat(token))){
             claims = tokenParse.parseToken(token);
            setHeaders(claims, request.mutate());
         }else {
             try {
                 claims = checkTokenUtil.check(token);
-                passedCircleBloomFilter.put(token);
+                circleBloomFilter.put(PASSED_PREFIX.concat(token));
                 setHeaders(claims, request.mutate());
             } catch (ExpiredJwtException e) {
-                expiredCircleBloomFilter.put(token);
+                circleBloomFilter.put(EXPIRED_PREFIX.concat(token));
                 response.setStatusCode(HttpStatus.FORBIDDEN);
                 return getVoidMono(response, request, BODY_403);
             } catch (Exception e){
-                stopedCircleBloomFilter.put(token);
+                circleBloomFilter.put(STOPPED_PREFIX.concat(token));
                 response.setStatusCode(HttpStatus.UNAUTHORIZED);
                 return getVoidMono(response, request, BODY_401);
             }
