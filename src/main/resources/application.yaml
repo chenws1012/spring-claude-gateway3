@@ -7,10 +7,23 @@ spring:
         ip:
 
     gateway:
+      filter:
+        request-rate-limiter:
+          deny-empty-key: false
+#          empty-key-status-code: 200
       default-filters:
-        - DedupeResponseHeader=Vary Access-Control-Allow-Credentials Access-Control-Allow-Origin, RETAIN_UNIQUE
-        - DedupeResponseHeader=Access-Control-Allow-Origin, RETAIN_FIRST
+#        - DedupeResponseHeader=Vary Access-Control-Allow-Credentials Access-Control-Allow-Origin, RETAIN_UNIQUE
+#        - DedupeResponseHeader=Access-Control-Allow-Origin, RETAIN_FIRST
 #        - RemoveRequestHeader=Authorization
+        - name: RequestRateLimiter
+          args:
+            # 令牌桶每秒填充平均速率
+            redis-rate-limiter.replenishRate: 15
+            # 令牌桶的上限
+            redis-rate-limiter.burstCapacity: 30
+            redis-rate-limiter.requestedTokens: 1
+            # 使用SpEL表达式从Spring容器中获取Bean对象
+            key-resolver: "#{@tokenKeyResolver}"
       discovery:
         locator:
           enabled: true
@@ -46,6 +59,9 @@ spring:
 
   application:
     name: gateway
+  redis:
+    host: 127.0.0.1
+    port: 63790
 
 server:
   port: 9000
