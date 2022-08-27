@@ -19,6 +19,7 @@ public class TokenKeyResolver implements KeyResolver {
         if(StringUtils.isEmpty(token)){
             return Mono.empty();
         }
-        return Mono.just(token);
+        int index = token.lastIndexOf(".");
+        return Mono.just(token.substring(index + 1));
     }
 }
