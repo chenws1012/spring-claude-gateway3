@@ -7,6 +7,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import static com.woody.gateway.filter.CheckTokenFilter.AUTHHEADER;
+import static com.woody.gateway.filter.CheckTokenFilter.USER_ID_KEY;
 
 /**
  * Created by chenwenshun on 2022/8/26
@@ -15,11 +16,10 @@ import static com.woody.gateway.filter.CheckTokenFilter.AUTHHEADER;
 public class TokenKeyResolver implements KeyResolver {
     @Override
     public Mono<String> resolve(ServerWebExchange exchange) {
-        String token = exchange.getRequest().getHeaders().getFirst(AUTHHEADER);
-        if(StringUtils.isEmpty(token)){
+        String userId = exchange.getRequest().getHeaders().getFirst(USER_ID_KEY);
+        if(StringUtils.isEmpty(userId)){
             return Mono.empty();
         }
-        int index = token.lastIndexOf(".");
-        return Mono.just(token.substring(index + 1));
+        return Mono.just(userId);
     }
 }
