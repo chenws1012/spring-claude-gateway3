@@ -7,6 +7,8 @@ spring:
         ip:
 
     gateway:
+      redis-rate-limiter:
+        includeHeaders: false
       filter:
         request-rate-limiter:
           deny-empty-key: false
