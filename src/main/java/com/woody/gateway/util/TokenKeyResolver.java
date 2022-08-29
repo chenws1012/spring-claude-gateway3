@@ -1,5 +1,6 @@
 package com.woody.gateway.util;
 
+import io.jsonwebtoken.Claims;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -17,9 +18,10 @@ public class TokenKeyResolver implements KeyResolver {
     @Override
     public Mono<String> resolve(ServerWebExchange exchange) {
         String userId = exchange.getRequest().getHeaders().getFirst(USER_ID_KEY);
+        String aud    = exchange.getRequest().getHeaders().getFirst(Claims.AUDIENCE);
         if(StringUtils.isEmpty(userId)){
             return Mono.empty();
         }
-        return Mono.just(userId);
+        return Mono.just(new StringBuilder(aud).append(".").append(userId).toString());
     }
 }
