@@ -43,7 +43,7 @@ Content-Type: application/json
 %}
 
 ### refreshToken
-GET {{host}}/ms-user/o/api/refreshToken?refreshToken=a33549bc-c1a1-451d-a86b-c13bdc75857d
+GET {{host}}/ms-user/o/api/refreshToken?refreshToken=745ebad5-a15e-4958-a9d0-ccc636f57484
 
 ###
 GET {{host}}/ms-user/userLoginLog/10
