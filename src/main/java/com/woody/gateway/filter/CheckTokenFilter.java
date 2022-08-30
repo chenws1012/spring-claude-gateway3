@@ -1,6 +1,5 @@
 package com.woody.gateway.filter;
 
-import com.google.common.collect.Lists;
 import com.woody.gateway.config.MyFilterConfiguration;
 import com.woody.gateway.util.CheckTokenUtil;
 import com.woody.gateway.util.CircleBloomFilter;
@@ -8,8 +7,6 @@ import com.woody.gateway.util.TokenParse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -27,7 +24,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -147,9 +143,6 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
             builder.header(USER_NAME_KEY, username);
         }
         builder.header(Claims.AUDIENCE, claims.getAudience());
-        Optional.ofNullable(claims.get("mid")).ifPresent(mid -> builder.header("Wd-merchantId", String.valueOf(mid)));
-        Optional.ofNullable(claims.get("sid")).ifPresent(sid -> builder.header("Wd-shopId", String.valueOf(sid)));
-        Optional.ofNullable(claims.get("admin")).ifPresent(admin -> builder.header("admin", String.valueOf(admin)));
     }
 
     public static void main(String[] args) {
