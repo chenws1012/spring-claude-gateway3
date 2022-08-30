@@ -11,7 +11,7 @@
 <!--    </appender>-->
     <appender name="accessLog" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <Pattern >%d{yyyy-MM-dd HH:mm:ss.SSS} %msg%n</Pattern >
+            <Pattern >%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %msg%n</Pattern >
         </encoder>
     </appender>
     <appender name="async" class="ch.qos.logback.classic.AsyncAppender">
