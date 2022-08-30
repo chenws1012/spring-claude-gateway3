@@ -19,7 +19,7 @@ public class TokenKeyResolver implements KeyResolver {
     public Mono<String> resolve(ServerWebExchange exchange) {
         String userId = exchange.getRequest().getHeaders().getFirst(USER_ID_KEY);
         String aud    = exchange.getRequest().getHeaders().getFirst(Claims.AUDIENCE);
-        if(StringUtils.isEmpty(userId)){
+        if(StringUtils.isEmpty(userId) || StringUtils.isEmpty(aud)){
             return Mono.empty();
         }
         return Mono.just(new StringBuilder(aud).append(".").append(userId).toString());
