@@ -56,6 +56,10 @@ spring:
             - Path=/test/{segment}
           filters:
             - SetPath=/{segment}
+        - id: host_route
+          uri: http://prd-api:8112
+          predicates:
+            - Host=api.shwoody.com
 
 
 
@@ -70,10 +74,10 @@ server:
 
 
 management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
+#  endpoints:
+#    web:
+#      exposure:
+#        include: '*'
   endpoint:
     health:
       show-details: always
