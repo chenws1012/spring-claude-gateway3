@@ -11,6 +11,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -73,6 +74,12 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         }
 
         String token = request.getHeaders().getFirst(AUTHHEADER);
+
+        if(token == null){
+            HttpCookie jwtCookie = request.getCookies().getFirst("jwt");
+            token = Optional.ofNullable(jwtCookie).map(HttpCookie::getValue).orElse(null);
+        }
+
         if(token == null){
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             return getVoidMono(response, request, BODY_401);
@@ -149,6 +156,6 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         AntPathMatcher pathMatcher = new AntPathMatcher();
         System.out.println(pathMatcher.match("/*", "/testing"));
         System.out.println(pathMatcher.match("/*/**", "/testing/testing"));
-        System.out.println(pathMatcher.match("/**", "/testing/testing/aa"));
+        System.out.println(pathMatcher.match("/ms-user/shop/*", "/ms-user/shop/employee/switchToken?shopId=5"));
     }
 }
