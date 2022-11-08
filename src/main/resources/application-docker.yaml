@@ -5,3 +5,6 @@ spring:
         server-addr: ${NACOS_ADDR}:${NACOS_PORT:8848}
         namespace: ${NACOS_NAMESPACE}
         ip:
+
+logging:
+  config: classpath:logback-prod.xml

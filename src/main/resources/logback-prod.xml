@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
+    <!-- 输出到文件 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/data/log/user-service.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>/data/log/access_log.log.%d{yyyyMMdd}</fileNamePattern>
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <Pattern >%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %msg%n</Pattern >
+        </encoder>
+    </appender>
 
-<!--    <appender name="accessLog" class="ch.qos.logback.core.FileAppender">-->
-<!--        <file>access_log.log</file>-->
-<!--        <encoder>-->
-<!--            <Pattern >%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - [%X{traceId:-},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-}] %msg%n</Pattern >-->
-<!--        </encoder>-->
-<!--    </appender>-->
+
     <appender name="accessLog" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <Pattern >%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %msg%n</Pattern >
