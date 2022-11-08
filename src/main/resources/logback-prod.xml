@@ -3,7 +3,7 @@
 
     <!-- 输出到文件 -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/data/log/user-service.log</file>
+        <file>/data/log/access_log.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>/data/log/access_log.log.%d{yyyyMMdd}</fileNamePattern>
             <maxHistory>60</maxHistory>
