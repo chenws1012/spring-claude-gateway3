@@ -2,7 +2,7 @@
 <configuration>
 
     <!-- 输出到文件 -->
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="accessLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>/data/log/access_log.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>/data/log/access_log.log.%d{yyyyMMdd}</fileNamePattern>
@@ -14,11 +14,11 @@
     </appender>
 
 
-    <appender name="accessLog" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <Pattern >%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %msg%n</Pattern >
-        </encoder>
-    </appender>
+<!--    <appender name="accessLog" class="ch.qos.logback.core.ConsoleAppender">-->
+<!--        <encoder>-->
+<!--            <Pattern >%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %msg%n</Pattern >-->
+<!--        </encoder>-->
+<!--    </appender>-->
     <appender name="async" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="accessLog" />
     </appender>
