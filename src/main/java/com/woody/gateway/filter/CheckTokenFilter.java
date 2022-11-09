@@ -113,6 +113,8 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
                 return getVoidMono(response, request, BODY_401);
             }
         }
+
+        request.mutate().header(AUTHHEADER, token);
         return chain.filter(exchange);
     }
 
