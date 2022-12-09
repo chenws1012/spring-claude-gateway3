@@ -12,5 +12,5 @@ WORKDIR /app
 
 EXPOSE 9000
 
-ENTRYPOINT java $JAVA_OPTS -jar -Dreactor.netty.http.server.accessLogEnabled=true -Dspring.profiles.active=$SPRING_PROFILE $JAR
+ENTRYPOINT java $JAVA_OPTS -jar -XX:+UseContainerSupport -XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=75.0 -Dreactor.netty.http.server.accessLogEnabled=true -Dspring.profiles.active=$SPRING_PROFILE $JAR
 
