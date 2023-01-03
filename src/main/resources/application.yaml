@@ -67,7 +67,7 @@ spring:
     name: gateway
   redis:
     host: 127.0.0.1
-    port: 63790
+    port: 6379
 
 server:
   port: 9000
