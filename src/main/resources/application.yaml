@@ -14,9 +14,6 @@ spring:
           deny-empty-key: false
 #          empty-key-status-code: 200
       default-filters:
-#        - DedupeResponseHeader=Vary Access-Control-Allow-Credentials Access-Control-Allow-Origin, RETAIN_UNIQUE
-#        - DedupeResponseHeader=Access-Control-Allow-Origin, RETAIN_FIRST
-#        - RemoveRequestHeader=Authorization
         - name: RequestRateLimiter
           args:
             # 令牌桶每秒填充平均速率
@@ -26,6 +23,9 @@ spring:
             redis-rate-limiter.requestedTokens: 1
             # 使用SpEL表达式从Spring容器中获取Bean对象
             key-resolver: "#{@tokenKeyResolver}"
+        - DedupeResponseHeader=Vary Access-Control-Allow-Credentials Access-Control-Allow-Origin, RETAIN_UNIQUE
+        - DedupeResponseHeader=Access-Control-Allow-Origin, RETAIN_FIRST
+#        - RemoveRequestHeader=Authorization
       discovery:
         locator:
           enabled: true
