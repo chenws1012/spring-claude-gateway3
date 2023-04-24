@@ -81,17 +81,14 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         }
 
         if(token == null){
-            response.setStatusCode(HttpStatus.UNAUTHORIZED);
             return getVoidMono(response, request, BODY_401);
         }
 
         if (circleBloomFilter.exists(STOPPED_PREFIX.concat(token))){
-            response.setStatusCode(HttpStatus.UNAUTHORIZED);
             return getVoidMono(response, request, BODY_401);
         }
 
         if (circleBloomFilter.exists(EXPIRED_PREFIX.concat(token))){
-            response.setStatusCode(HttpStatus.FORBIDDEN);
             return getVoidMono(response, request, BODY_403);
         }
         Claims claims = null;
@@ -105,11 +102,9 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
                 setHeaders(claims, request.mutate());
             } catch (ExpiredJwtException e) {
                 circleBloomFilter.put(EXPIRED_PREFIX.concat(token));
-                response.setStatusCode(HttpStatus.FORBIDDEN);
                 return getVoidMono(response, request, BODY_403);
             } catch (Exception e){
                 circleBloomFilter.put(STOPPED_PREFIX.concat(token));
-                response.setStatusCode(HttpStatus.UNAUTHORIZED);
                 return getVoidMono(response, request, BODY_401);
             }
         }
