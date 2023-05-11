@@ -5,6 +5,11 @@ spring:
         server-addr: ${NACOS_ADDR}:${NACOS_PORT:8848}
         namespace: ${NACOS_NAMESPACE}
         ip:
+  redis:
+    host: ${GATEWAY_REDIS_HOST}
+    port: ${GATEWAY_REDIS_PORT}
+    password: ${GATEWAY_REDIS_PASSWORD}
+    database: ${GATEWAY_REDIS_DATABASE}
 
 logging:
   config: classpath:logback-prod.xml
