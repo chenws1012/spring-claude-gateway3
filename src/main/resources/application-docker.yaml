@@ -4,7 +4,7 @@ spring:
       discovery:
         server-addr: ${NACOS_ADDR}:${NACOS_PORT:8848}
         namespace: ${NACOS_NAMESPACE}
-        ip:
+        register-enabled: false
   redis:
     host: ${GATEWAY_REDIS_HOST}
     port: ${GATEWAY_REDIS_PORT}
