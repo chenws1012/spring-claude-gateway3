@@ -23,7 +23,7 @@ spring:
             redis-rate-limiter.requestedTokens: 1
             # 使用SpEL表达式从Spring容器中获取Bean对象
             key-resolver: "#{@tokenKeyResolver}"
-        - DedupeResponseHeader=Vary Access-Control-Allow-Credentials Access-Control-Allow-Origin, RETAIN_FIRST
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin, RETAIN_FIRST
 #        - RemoveRequestHeader=Authorization
       discovery:
         locator:
