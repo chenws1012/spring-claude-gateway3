@@ -69,9 +69,7 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         String traceId = UUID.randomUUID().toString();
         request.mutate().header(TRACE_ID, traceId);
         //请求路径白名单 判断
-        if (checkWhitePath(request.getPath().value())){
-            return chain.filter(exchange);
-        }
+        boolean isWhite = checkWhitePath(request.getPath().value());
 
         String token = request.getHeaders().getFirst(AUTHHEADER);
 
@@ -80,15 +78,15 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
             token = Optional.ofNullable(jwtCookie).map(HttpCookie::getValue).orElse(null);
         }
 
-        if(token == null){
+        if(token == null && !isWhite){
             return getVoidMono(response, request, BODY_401);
         }
 
-        if (circleBloomFilter.exists(STOPPED_PREFIX.concat(token))){
+        if (circleBloomFilter.exists(STOPPED_PREFIX.concat(token)) && !isWhite){
             return getVoidMono(response, request, BODY_401);
         }
 
-        if (circleBloomFilter.exists(EXPIRED_PREFIX.concat(token))){
+        if (circleBloomFilter.exists(EXPIRED_PREFIX.concat(token)) && !isWhite){
             return getVoidMono(response, request, BODY_403);
         }
         Claims claims = null;
@@ -102,10 +100,14 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
                 setHeaders(claims, request.mutate());
             } catch (ExpiredJwtException e) {
                 circleBloomFilter.put(EXPIRED_PREFIX.concat(token));
-                return getVoidMono(response, request, BODY_403);
+                if (!isWhite) {
+                    return getVoidMono(response, request, BODY_403);
+                }
             } catch (Exception e){
                 circleBloomFilter.put(STOPPED_PREFIX.concat(token));
-                return getVoidMono(response, request, BODY_401);
+                if (!isWhite) {
+                    return getVoidMono(response, request, BODY_401);
+                }
             }
         }
 
