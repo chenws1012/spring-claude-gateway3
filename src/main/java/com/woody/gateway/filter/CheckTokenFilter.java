@@ -78,8 +78,12 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
             token = Optional.ofNullable(jwtCookie).map(HttpCookie::getValue).orElse(null);
         }
 
-        if(token == null && !isWhite){
-            return getVoidMono(response, request, BODY_401);
+        if(token == null){
+            if (isWhite){
+                return chain.filter(exchange);
+            }else {
+                return getVoidMono(response, request, BODY_401);
+            }
         }
 
         if (circleBloomFilter.exists(STOPPED_PREFIX.concat(token)) && !isWhite){
