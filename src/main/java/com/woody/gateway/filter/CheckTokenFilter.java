@@ -86,12 +86,20 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
             }
         }
 
-        if (circleBloomFilter.exists(STOPPED_PREFIX.concat(token)) && !isWhite){
-            return getVoidMono(response, request, BODY_401);
+        if (circleBloomFilter.exists(STOPPED_PREFIX.concat(token))){
+            if (isWhite){
+                return chain.filter(exchange);
+            }else {
+                return getVoidMono(response, request, BODY_401);
+            }
         }
 
-        if (circleBloomFilter.exists(EXPIRED_PREFIX.concat(token)) && !isWhite){
-            return getVoidMono(response, request, BODY_403);
+        if (circleBloomFilter.exists(EXPIRED_PREFIX.concat(token))){
+            if (isWhite){
+                return chain.filter(exchange);
+            }else {
+                return getVoidMono(response, request, BODY_403);
+            }
         }
         Claims claims = null;
         if (circleBloomFilter.exists(PASSED_PREFIX.concat(token))){
