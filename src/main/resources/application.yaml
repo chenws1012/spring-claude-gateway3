@@ -80,3 +80,6 @@ management:
   endpoint:
     health:
       show-details: always
+  health:
+    nacosConfig:
+      enabled: false
