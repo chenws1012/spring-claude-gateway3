@@ -4,6 +4,8 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
         namespace:
+        username: ${NACOS_USERNAME:nacos}
+        password: ${NACOS_PASSWORD:woody@301}
         ip:
 
     gateway:
