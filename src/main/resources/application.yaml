@@ -85,5 +85,5 @@ management:
   health:
     nacosConfig:
       enabled: false
-#    nacosDiscovery:
-#      enabled: false
+    nacosDiscovery:
+      enabled: false
