@@ -66,7 +66,7 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         if (request.getMethod() == HttpMethod.OPTIONS){
             return chain.filter(exchange);
         }
-        String traceId = UUID.randomUUID().toString();
+        String traceId = Optional.ofNullable(request.getHeaders().getFirst(TRACE_ID)).orElseGet(() -> UUID.randomUUID().toString());
         request.mutate().header(TRACE_ID, traceId);
         //请求路径白名单 判断
         boolean isWhite = checkWhitePath(request.getPath().value());
