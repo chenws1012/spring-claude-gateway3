@@ -22,6 +22,6 @@ public class TokenKeyResolver implements KeyResolver {
         if(StringUtils.isEmpty(userId) || StringUtils.isEmpty(aud)){
             return Mono.empty();
         }
-        return Mono.just(new StringBuilder(aud).append(".").append(userId).toString());
+        return Mono.just(aud + "." + userId);
     }
 }
