@@ -46,16 +46,40 @@ public class CheckTokenUtil {
                 "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAElpzANDFRDkLNJ6Ee4iB9hogVXD56\n" +
                 "gNchXHXAnuYxLxuNPPBZDvtvMBUToT+L2UiUzusQJYo9oI86GH9NUqJCjQ==\n" +
                 "-----END PUBLIC KEY-----";
+        checkTokenUtil.publicKeyPem = "-----BEGIN PUBLIC KEY-----\n" +
+                "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEbsc9wnZ/dKLbEDZYIXFJ6eO8jfik\n" +
+                "XQSGS9fGecCDxpYQA/LyalWZw/5sQ5TLU60rgK7sPC1MGYIATZKUWS9saw==\n" +
+                "-----END PUBLIC KEY-----\n";
+
+        checkTokenUtil.publicKeyPem = "-----BEGIN PUBLIC KEY-----\n" +
+                "  MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+2tpCIV+PxzwCRUb2/6VzjOkJ/oz\n" +
+                "  D+hOyPFKo02R9Oq5EM3QEC3MguBbelPeG72I488c8R9dlK416OVyBBn2gA==\n" +
+                "  -----END PUBLIC KEY-----";
         checkTokenUtil.init();
+
+        checkTokenUtil.check("eyJraWQiOiJDV1MiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJjb20ud29vZHkiLCJhdWQiOiJZVU5fTUVOR19TSE9QIiwic3ViIjoi5pil56WlIiwiaWF0IjoxNzI3MjM0NTg4LCJleHAiOjE3Mjk4MjY1ODgsImp0aSI6ImUwOWE1ZDI3LTcwOWItNDBmOS1hZTBmLWU3YWM3OGI2MzQ4NyIsInVpZCI6IjE4MTUyMDMxNDM4MzE2MDUyNDgifQ.LiNQTXe3j3IAitYefmmH9rlZnxSB7FQJQRzFrKXLTAXHLvPK5z2PiWuKeTC3j2GLe4n5c92gRPDNjzg0BtM7mQ");
 
         Claims check1 = null;
         long start = System.currentTimeMillis();
-        for (int i = 0; i < 10000*100; i++) {
+        CircleBloomFilter circleBloomFilter = new CircleBloomFilter();
+        String token = "eyJraWQiOiJFRjRGMjJDMC01Q0IwLTQzNDgtOTY3Qi0wMjY0OTVFN0VGQzgiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJjb20uemhpaHVpc2h1IiwiYXVkIjoicGMiLCJzdWIiOiJCZWxsYSIsImlhdCI6MTY0MTI3NDg2NCwiZXhwIjoxNjQxOTk0ODY0LCJqdGkiOiJjNGE2ODA4ZS0zMjUzLTQxODYtOTFjMC0wZmQ5MWY5MmFiYjMiLCJ1aWQiOjMsInJvbGUiOiJhZG1pbiJ9.4BTqbPYau8EPOLB7Z_5Gj41kZX_UnTeeb0JwYojVSr1NoMK-49W04NWRMA9HebifjwPDotGwKPjZqvk-VWZ1xQ";
+        for (int i = 0; i < 1; i++) {
+//            if (circleBloomFilter.exists("passed"+token)){
+//                System.out.println("passed");
+//                continue;
+//            }
+//
+//            if(circleBloomFilter.exists("failed"+token)){
+//                System.out.println("failed");
+//                continue;
+//            }
             try {
-                check1 = checkTokenUtil.check("eyJraWQiOiJFRjRGMjJDMC01Q0IwLTQzNDgtOTY3Qi0wMjY0OTVFN0VGQzgiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJjb20uemhpaHVpc2h1IiwiYXVkIjoicGMiLCJzdWIiOiJCZWxsYSIsImlhdCI6MTY0MTI3NDg2NCwiZXhwIjoxNjQxOTk0ODY0LCJqdGkiOiJjNGE2ODA4ZS0zMjUzLTQxODYtOTFjMC0wZmQ5MWY5MmFiYjMiLCJ1aWQiOjMsInJvbGUiOiJhZG1pbiJ9.4BTqbPYau8EPOLB7Z_5Gj41kZX_UnTeeb0JwYojVSr1NoMK-49W04NWRMA9HebifjwPDotGwKPjZqvk-VWZ1xQ");
+                check1 = checkTokenUtil.check(token);
                 System.out.println(check1);
+                circleBloomFilter.put("passed"+token);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
+                circleBloomFilter.put("failed"+token);
 //                e.printStackTrace();
             }
         }
