@@ -50,10 +50,8 @@ public class CircleBloomFilter {
     }
 
     public Boolean exists(String key){
-        Iterator<BloomFilter<CharSequence>> iterator = this.filters.iterator();
-
-        while ( iterator.hasNext() ){
-            if (iterator.next().mightContain(key)){
+        for (BloomFilter<CharSequence> filter : this.filters) {
+            if (filter.mightContain(key)) {
                 return true;
             }
         }
