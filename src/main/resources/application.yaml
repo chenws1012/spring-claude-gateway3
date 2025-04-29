@@ -71,15 +71,11 @@ spring:
 server:
   port: 9000
 
-
 management:
-#  endpoints:
-#    web:
-#      exposure:
-#        include: '*'
   endpoint:
     health:
       show-details: always
+
   health:
     nacosConfig:
       enabled: false
