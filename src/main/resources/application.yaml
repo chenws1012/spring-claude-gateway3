@@ -28,7 +28,7 @@ spring:
       discovery:
         locator:
           enabled: true
-          include-expression: serviceId != 'paygate-business' and serviceId != 'service-d'
+          include-expression: serviceId != 'paygate-business' and serviceId != 'ms-split'
       globalcors:
         cors-configurations:
           '[/**]':
