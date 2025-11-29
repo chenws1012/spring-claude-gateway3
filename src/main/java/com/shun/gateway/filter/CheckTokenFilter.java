@@ -18,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -28,7 +27,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -72,7 +70,7 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         String traceId = Optional.ofNullable(request.getHeaders().getFirst(TRACE_ID)).orElseGet(this::generateTraceId);
         request.mutate().header(TRACE_ID, traceId);
         //请求路径白名单 判断
-        boolean isWhite = checkWhitePath(request.getPath().value());
+        boolean isWhite = checkWhitePath(request);
 
         String token = request.getHeaders().getFirst(AUTHHEADER);
 
@@ -149,16 +147,10 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         return -100;
     }
 
-    private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
-    private boolean checkWhitePath(String reqPath){
-        for (String white : myFilterConfiguration.getWhiteList()) {
-            if (pathMatcher.match(white, reqPath)) {
-                return true;
-            }
-        }
-
-        return false;
+    private boolean checkWhitePath(ServerHttpRequest request){
+        return myFilterConfiguration.getWhitePatterns().stream()
+                .anyMatch(pattern -> pattern.matches(request.getPath()));
     }
 
     private void setHeaders(Claims claims, ServerHttpRequest.Builder builder){
@@ -175,12 +167,17 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         }
     }
 
-    public static void main(String[] args) {
-        AntPathMatcher pathMatcher = new AntPathMatcher();
-        System.out.println(pathMatcher.match("/*", "/testing"));
-        System.out.println(pathMatcher.match("/*/**", "/testing/testing"));
-        System.out.println(pathMatcher.match("/ms-user/shop/*", "/ms-user/shop/employee/switchToken?shopId=5"));
-    }
+//    public static void main(String[] args) {
+//        AntPathMatcher pathMatcher = new AntPathMatcher();
+//        System.out.println(pathMatcher.match("/*", "/testing"));
+//        System.out.println(pathMatcher.match("/*/**", "/testing/testing"));
+//        System.out.println(pathMatcher.match("/ms-user/shop/*", "/ms-user/shop/employee/switchToken?shopId=5"));
+//        System.out.println(pathMatcher.match("/foo/*","/foo/bar"));
+//        PathPatternParser parser = new PathPatternParser();
+//        PathPattern pattern = parser.parse("/ms-user/shop/**");
+//        boolean matches = pattern.matches(PathContainer.parsePath("/ms-user/shop/employee/switchToken?shopId=5"));
+//        System.out.println(matches);
+//    }
 
     private Mono<Claims> verifyTokenReactive(String token) {
         return Mono.fromCallable(() -> checkTokenUtil.check(token)) // 同步逻辑放到 Callable
