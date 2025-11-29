@@ -25,10 +25,10 @@
 ## 📦 快速开始
 
 ### 前置要求
-- Java 8+
+- Java 17
 - Nacos (`127.0.0.1:8848`)
 - Redis (`127.0.0.1:6379`)
-- 配置 `publicKeyPem`（JWT 公钥 PEM 格式）
+- 配置 `publicKeyPem`（ECC 公钥 PEM 格式，Nacos/env）
 
 ### 构建 & 运行
 ```bash
@@ -71,19 +71,19 @@ spring:
     host: 127.0.0.1
     port: 6379
 
-# JWT 公钥（Nacos 或环境变量）
+# JWT 公钥
 publicKeyPem: |
   -----BEGIN PUBLIC KEY-----
   ...
   -----END PUBLIC KEY-----
 
-# 白名单路径（逗号分隔）
+# 白名单路径
 my-filter:
   config:
     whiteList: /public/**,/health,/actuator/**
 ```
 
-完整配置刷新支持 `@RefreshScope`。
+完整配置支持 Nacos 动态刷新 `@RefreshScope`。
 
 ## 🔧 核心组件
 
@@ -91,7 +91,7 @@ my-filter:
 |------|------|------|
 | `CheckTokenFilter` | `src/main/java/com/woody/gateway/filter/CheckTokenFilter.java` | 全局鉴权过滤器，处理白名单、缓存、令牌验证 |
 | `CircleBloomFilter` | `src/main/java/com/woody/gateway/util/CircleBloomFilter.java` | 5 个旋转过滤器，缓存 `passed/expired/stopped` 状态 |
-| `CheckTokenUtil` | `src/main/java/com/woody/gateway/util/CheckTokenUtil.java` | ECC 公钥 JWT 验证（BouncyCastle） |
+| `CheckTokenUtil` | `src/main/java/com/woody/gateway/util/CheckTokenUtil.java` | ECC 公钥 JWT 验证（jjwt + BouncyCastle） |
 | `TokenParse` | `src/main/java/com/woody/gateway/util/TokenParse.java` | 快速 payload 解析（无签名） |
 | `MyFilterConfiguration` | `src/main/java/com/woody/gateway/config/MyFilterConfiguration.java` | 白名单配置 |
 
@@ -107,27 +107,22 @@ my-filter:
 
 ### CI/CD (GitLab CI)
 - 自动部署：test/dev/sit/stage
-- 手动部署：release/prod
-
-### K8s 示例
-```yaml
-# 参考 CI 流水线
-```
+- 手动部署：release/prod (K8s)
 
 ## 📚 依赖
 
-- Spring Boot 2.3.12.RELEASE
-- Spring Cloud Gateway
+- Spring Boot 3.1.5
+- Spring Cloud 2022.0.5 / Alibaba 2022.0.0.0
 - Nacos Discovery/Config
 - Redis Reactive
-- jjwt + BouncyCastle
-- Guava (BloomFilter)
+- jjwt 0.12.3 + BouncyCastle 1.60
+- Guava 32.1.1-jre
 
 ## 🤝 贡献
 
 1. Fork 项目
 2. 创建 feature 分支
-3. 提交 PR 到 `release` 分支
+3. 提交 PR 到 `main` 分支
 
 ## 📄 许可证
 
