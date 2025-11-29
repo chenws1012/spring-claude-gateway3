@@ -71,7 +71,7 @@ spring:
         - id: host_route
           uri: http://prd-api:8112
           predicates:
-            - Host=api.shwoody.com
+            - Host=api.demo.com
 
 
 
