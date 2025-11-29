@@ -89,11 +89,11 @@ Full configuration supports dynamic Nacos refresh with `@RefreshScope`.
 
 | Component | Path | Description |
 |-----------|------|-------------|
-| `CheckTokenFilter` | `src/main/java/com/woody/gateway/filter/CheckTokenFilter.java` | Global auth filter handling whitelists, cache, token validation |
-| `CircleBloomFilter` | `src/main/java/com/woody/gateway/util/CircleBloomFilter.java` | 5 rotating filters caching `passed/expired/stopped` states |
-| `CheckTokenUtil` | `src/main/java/com/woody/gateway/util/CheckTokenUtil.java` | ECC public key JWT validation (jjwt + BouncyCastle) |
-| `TokenParse` | `src/main/java/com/woody/gateway/util/TokenParse.java` | Fast payload parsing (no signature) |
-| `MyFilterConfiguration` | `src/main/java/com/woody/gateway/config/MyFilterConfiguration.java` | Whitelist configuration |
+| `CheckTokenFilter` | `src/main/java/com/shun/gateway/filter/CheckTokenFilter.java` | Global auth filter handling whitelists, cache, token validation |
+| `CircleBloomFilter` | `src/main/java/com/shun/gateway/util/CircleBloomFilter.java` | 5 rotating filters caching `passed/expired/stopped` states |
+| `CheckTokenUtil` | `src/main/java/com/shun/gateway/util/CheckTokenUtil.java` | ECC public key JWT validation (jjwt + BouncyCastle) |
+| `TokenParse` | `src/main/java/com/shun/gateway/util/TokenParse.java` | Fast payload parsing (no signature) |
+| `MyFilterConfiguration` | `src/main/java/com/shun/gateway/config/MyFilterConfiguration.java` | Whitelist configuration |
 
 ## 🧪 Testing & Health Checks
 
