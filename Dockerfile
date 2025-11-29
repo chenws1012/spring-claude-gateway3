@@ -1,6 +1,5 @@
-FROM swr.cn-east-3.myhuaweicloud.com/woody-public/ubuntu-22.4:1.8.441_skywalking-9.4
-#FROM openjdk:8-jre-alpine
-MAINTAINER from shwoody.com by wenshun.chen (chenwenshun@shwoody.com)
+FROM openjdk:8-jre-alpine
+MAINTAINER from shwoody.com by wenshun.chen (chenwenshun@gmail.com)
 
 ENV JAR="gateway.jar"
 RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
