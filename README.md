@@ -1,6 +1,6 @@
 # Hive Gateway
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.woody/hive-gateway.svg)](https://mvnrepository.com/artifact/com.woody/hive-gateway)
+[![Maven Central](https://img.shields.io/maven-central/v/com.shun/hive-gateway.svg)](https://mvnrepository.com/artifact/com.shun/hive-gateway)
 
 Microservice gateway based on **Spring Cloud Gateway**, providing JWT token authentication, service discovery, rate limiting, and more.
 

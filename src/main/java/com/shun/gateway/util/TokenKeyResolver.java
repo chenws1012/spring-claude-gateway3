@@ -1,4 +1,4 @@
-package com.woody.gateway.util;
+package com.shun.gateway.util;
 
 import io.jsonwebtoken.Claims;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
@@ -7,8 +7,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import static com.woody.gateway.filter.CheckTokenFilter.AUTHHEADER;
-import static com.woody.gateway.filter.CheckTokenFilter.USER_ID_KEY;
+import static com.shun.gateway.filter.CheckTokenFilter.AUTHHEADER;
+import static com.shun.gateway.filter.CheckTokenFilter.USER_ID_KEY;
 
 /**
  * Created by chenwenshun on 2022/8/26
