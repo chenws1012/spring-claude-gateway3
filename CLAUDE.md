@@ -42,9 +42,9 @@ Request → CheckTokenFilter (whitelist/Bloom cache/JWT verify) → Rate Limit �
 ```
 
 Key packages:
-- `com.woody.gateway.filter`: Global auth filter
-- `com.woody.gateway.util`: BloomFilter, token utils
-- `com.woody.gateway.config`: Whitelists, routes
+- `com.shun.gateway.filter`: Global auth filter
+- `com.shun.gateway.util`: BloomFilter, token utils
+- `com.shun.gateway.config`: Whitelists, routes
 
 ### Config Requirements
 - Nacos: `127.0.0.1:8848`

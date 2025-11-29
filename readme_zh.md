@@ -1,6 +1,6 @@
 # Hive Gateway
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.woody/hive-gateway.svg)](https://mvnrepository.com/artifact/com.woody/hive-gateway)
+[![Maven Central](https://img.shields.io/maven-central/v/com.shun/hive-gateway.svg)](https://mvnrepository.com/artifact/com.shun/hive-gateway)
 
 基于 **Spring Cloud Gateway** 的微服务网关，提供 JWT 令牌鉴权、服务发现、限流等功能。
 
