@@ -26,6 +26,7 @@ import reactor.core.publisher.Mono;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -160,7 +161,10 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         } catch (UnsupportedEncodingException e) {
             builder.header(USER_NAME_KEY, username);
         }
-        builder.header(Claims.AUDIENCE, claims.getAudience());
+        Set<String> claimsAudience = claims.getAudience();
+        if (claimsAudience != null && claimsAudience.size() > 0) {
+            builder.header(Claims.AUDIENCE, (String) claimsAudience.toArray()[0]);
+        }
     }
 
     public static void main(String[] args) {
