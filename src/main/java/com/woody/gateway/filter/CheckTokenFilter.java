@@ -22,12 +22,14 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by chenwenshun on 2022/6/14
@@ -67,7 +69,7 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         if (request.getMethod() == HttpMethod.OPTIONS){
             return chain.filter(exchange);
         }
-        String traceId = Optional.ofNullable(request.getHeaders().getFirst(TRACE_ID)).orElseGet(() -> UUID.randomUUID().toString());
+        String traceId = Optional.ofNullable(request.getHeaders().getFirst(TRACE_ID)).orElseGet(this::generateTraceId);
         request.mutate().header(TRACE_ID, traceId);
         //请求路径白名单 判断
         boolean isWhite = checkWhitePath(request.getPath().value());
@@ -106,26 +108,30 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         if (circleBloomFilter.exists(PASSED_PREFIX.concat(token))){
             claims = tokenParse.parseToken(token);
            setHeaders(claims, request.mutate());
-        }else {
-            try {
-                claims = checkTokenUtil.check(token);
-                circleBloomFilter.put(PASSED_PREFIX.concat(token));
-                setHeaders(claims, request.mutate());
-            } catch (ExpiredJwtException e) {
-                circleBloomFilter.put(EXPIRED_PREFIX.concat(token));
-                if (!isWhite) {
-                    return getVoidMono(response, request, BODY_403);
-                }
-            } catch (Exception e){
-                circleBloomFilter.put(STOPPED_PREFIX.concat(token));
-                if (!isWhite) {
-                    return getVoidMono(response, request, BODY_401);
-                }
-            }
+            request.mutate().header(AUTHHEADER, token);
+            return chain.filter(exchange);
         }
 
-        request.mutate().header(AUTHHEADER, token);
-        return chain.filter(exchange);
+        String finalToken = token;
+        return verifyTokenReactive( token)
+                .flatMap(claims2 -> {
+                    circleBloomFilter.put(PASSED_PREFIX.concat(finalToken));
+                    setHeaders(claims2, request.mutate());
+                    request.mutate().header(AUTHHEADER, finalToken);
+                    return chain.filter(exchange);
+                }).onErrorResume(e -> {
+                    if (e instanceof ExpiredJwtException){
+                        circleBloomFilter.put(EXPIRED_PREFIX.concat(finalToken));
+                        if (!isWhite) {return getVoidMono(response, request, BODY_403);}
+                    }else{
+                        circleBloomFilter.put(STOPPED_PREFIX.concat(finalToken));
+                        if (!isWhite) {
+                            return getVoidMono(response, request, BODY_401);
+                        }
+                    }
+                    return chain.filter(exchange); // fallback to white path
+                });
+
     }
 
     private Mono<Void> getVoidMono(ServerHttpResponse serverHttpResponse, ServerHttpRequest httpRequest, String body) {
@@ -173,4 +179,16 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         System.out.println(pathMatcher.match("/*/**", "/testing/testing"));
         System.out.println(pathMatcher.match("/ms-user/shop/*", "/ms-user/shop/employee/switchToken?shopId=5"));
     }
+
+    private Mono<Claims> verifyTokenReactive(String token) {
+        return Mono.fromCallable(() -> checkTokenUtil.check(token)) // 同步逻辑放到 Callable
+                .subscribeOn(Schedulers.boundedElastic());       // 放阻塞线程池执行
+    }
+
+    // 使用时间戳 + ThreadLocalRandom 生成唯一ID
+    private String generateTraceId() {
+        return System.currentTimeMillis() + "-" +
+                ThreadLocalRandom.current().nextLong(100000, 999999);
+    }
+
 }
