@@ -89,11 +89,11 @@ my-filter:
 
 | 组件 | 路径 | 描述 |
 |------|------|------|
-| `CheckTokenFilter` | `src/main/java/com/woody/gateway/filter/CheckTokenFilter.java` | 全局鉴权过滤器，处理白名单、缓存、令牌验证 |
-| `CircleBloomFilter` | `src/main/java/com/woody/gateway/util/CircleBloomFilter.java` | 5 个旋转过滤器，缓存 `passed/expired/stopped` 状态 |
-| `CheckTokenUtil` | `src/main/java/com/woody/gateway/util/CheckTokenUtil.java` | ECC 公钥 JWT 验证（jjwt + BouncyCastle） |
-| `TokenParse` | `src/main/java/com/woody/gateway/util/TokenParse.java` | 快速 payload 解析（无签名） |
-| `MyFilterConfiguration` | `src/main/java/com/woody/gateway/config/MyFilterConfiguration.java` | 白名单配置 |
+| `CheckTokenFilter` | `src/main/java/com/shun/gateway/filter/CheckTokenFilter.java` | 全局鉴权过滤器，处理白名单、缓存、令牌验证 |
+| `CircleBloomFilter` | `src/main/java/com/shun/gateway/util/CircleBloomFilter.java` | 5 个旋转过滤器，缓存 `passed/expired/stopped` 状态 |
+| `CheckTokenUtil` | `src/main/java/com/shun/gateway/util/CheckTokenUtil.java` | ECC 公钥 JWT 验证（jjwt + BouncyCastle） |
+| `TokenParse` | `src/main/java/com/shun/gateway/util/TokenParse.java` | 快速 payload 解析（无签名） |
+| `MyFilterConfiguration` | `src/main/java/com/shun/gateway/config/MyFilterConfiguration.java` | 白名单配置 |
 
 ## 🧪 测试 & 健康检查
 
