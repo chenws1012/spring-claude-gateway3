@@ -85,7 +85,7 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
             if (isWhite){
                 return chain.filter(exchange);
             }else {
-                return getVoidMono(response, request, BODY_401);
+                return getVoidMono(response, request, HttpStatus.UNAUTHORIZED, BODY_401);
             }
         }
 
@@ -93,7 +93,7 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
             if (isWhite){
                 return chain.filter(exchange);
             }else {
-                return getVoidMono(response, request, BODY_401);
+                return getVoidMono(response, request, HttpStatus.UNAUTHORIZED, BODY_401);
             }
         }
 
@@ -101,7 +101,7 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
             if (isWhite){
                 return chain.filter(exchange);
             }else {
-                return getVoidMono(response, request, BODY_403);
+                return getVoidMono(response, request, HttpStatus.FORBIDDEN, BODY_403);
             }
         }
         Claims claims = null;
@@ -122,11 +122,11 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
                 }).onErrorResume(e -> {
                     if (e instanceof ExpiredJwtException){
                         circleBloomFilter.put(EXPIRED_PREFIX.concat(finalToken));
-                        if (!isWhite) {return getVoidMono(response, request, BODY_403);}
+                        if (!isWhite) {return getVoidMono(response, request, HttpStatus.FORBIDDEN, BODY_403);}
                     }else{
                         circleBloomFilter.put(STOPPED_PREFIX.concat(finalToken));
                         if (!isWhite) {
-                            return getVoidMono(response, request, BODY_401);
+                            return getVoidMono(response, request, HttpStatus.UNAUTHORIZED, BODY_401);
                         }
                     }
                     return chain.filter(exchange); // fallback to white path
@@ -134,9 +134,11 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
 
     }
 
-    private Mono<Void> getVoidMono(ServerHttpResponse serverHttpResponse, ServerHttpRequest httpRequest, String body) {
+    private Mono<Void> getVoidMono(ServerHttpResponse serverHttpResponse, ServerHttpRequest httpRequest, HttpStatus status, String body) {
         HttpHeaders headers = serverHttpResponse.getHeaders();
         headers.add("Content-Type", "application/json;charset=UTF-8");
+
+        serverHttpResponse.setStatusCode(status);
         
         DataBuffer dataBuffer = serverHttpResponse.bufferFactory().wrap(body.getBytes());
         return serverHttpResponse.writeWith(Flux.just(dataBuffer));
