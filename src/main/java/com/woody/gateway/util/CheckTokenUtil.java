@@ -7,7 +7,7 @@ import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -31,11 +31,11 @@ public class CheckTokenUtil {
     }
 
     public Claims check(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(PUBLICKEY)
+        Claims claims = Jwts.parser()
+                .verifyWith(PUBLICKEY)
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
 
         return claims;
     }

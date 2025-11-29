@@ -1,7 +1,19 @@
 spring:
+  application:
+    name: gateway
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  config:
+    import: "optional:nacos:gateway"
   cloud:
     nacos:
+      config:
+#        enabled: false
+        server-addr: 127.0.0.1:8848
+        file-extension: yml
       discovery:
+#        enabled: false
         server-addr: 127.0.0.1:8848
         namespace:
         ip:
@@ -33,7 +45,7 @@ spring:
         cors-configurations:
           '[/**]':
             maxAge: 3600
-            allowedOrigins: "*"
+            allowedOriginPatterns: "*"
             allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization, *"
             allowCredentials: true
             allowedMethods:
@@ -63,12 +75,6 @@ spring:
 
 
 
-  application:
-    name: gateway
-  redis:
-    host: 127.0.0.1
-    port: 6379
-
 server:
   port: 9000
 
@@ -82,3 +88,15 @@ management:
       enabled: false
     nacosDiscovery:
       enabled: false
+
+publicKeyPem: |
+  -----BEGIN PUBLIC KEY-----
+  MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAElpzANDFRDkLNJ6Ee4iB9hogVXD56
+  gNchXHXAnuYxLxuNPPBZDvtvMBUToT+L2UiUzusQJYo9oI86GH9NUqJCjQ==
+  -----END PUBLIC KEY-----
+
+#my-filter:
+#  config:
+#    whiteList:
+##      - /actuator/**
+##      - /test/**

@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 @Component
 public class TokenParse {
     public static final char SEPARATOR_CHAR = '.';
-    private Decoder<String, byte[]> base64UrlDecoder = Decoders.BASE64URL;
+    private Decoder<CharSequence, byte[]> base64UrlDecoder = Decoders.BASE64URL;
 
     public Claims parseToken(String jwt){
         String base64UrlEncodedHeader = null;
