@@ -48,7 +48,7 @@
 docker build -t hive-gateway:latest .
 
 # 运行
-docker run -p 8080:8080 -e SPRING_PROFILES_ACTIVE=dev hive-gateway:latest
+docker run -p 9000:9000 -e SPRING_PROFILES_ACTIVE=dev hive-gateway:latest
 ```
 
 ## ⚙️ 配置

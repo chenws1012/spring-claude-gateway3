@@ -9,7 +9,7 @@
 		<relativePath/>
 	</parent>
 
-	<groupId>com.woody</groupId>
+	<groupId>com.shun</groupId>
 	<artifactId>gateway</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>gateway</name>
@@ -120,7 +120,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.woody.gateway.GatewayApplication</mainClass>
+					<mainClass>com.shun.gateway.GatewayApplication</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>
