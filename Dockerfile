@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-alpine
+FROM amazoncorretto:17-alpine
 MAINTAINER from shwoody.com by wenshun.chen (chenwenshun@gmail.com)
 
 ENV JAR="gateway.jar"
