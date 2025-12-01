@@ -72,8 +72,11 @@ public class CheckTokenFilter implements GlobalFilter, Ordered {
         //请求路径白名单 判断
         boolean isWhite = checkWhitePath(request);
 
-        String token = request.getHeaders().getFirst(AUTHHEADER);
-
+        String authHeader = request.getHeaders().getFirst(AUTHHEADER);
+        String token = null;
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            token = authHeader.substring(7);
+        }
         if(token == null){
             HttpCookie jwtCookie = request.getCookies().getFirst("jwt");
             token = Optional.ofNullable(jwtCookie).map(HttpCookie::getValue).orElse(null);
