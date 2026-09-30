@@ -36,3 +36,7 @@ build/
 */.DS_Store
 
 arthas-output/
+
+### REST Client ###
+doc/api-test.http
+doc/rest-client.env.json
